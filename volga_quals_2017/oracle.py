@@ -26,7 +26,6 @@ def check_padding(sock, cipher):
     l = b64decode(sock.recv(1024))
 
     if l[0] == "\xa3":
-#        print "Mac error"
         return True
 
     return False
