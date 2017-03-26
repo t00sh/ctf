@@ -80,7 +80,7 @@ def block_to_text(block):
 
 def attack(sock, cipher):
     blocks = split_blocks(cipher)
-    plain = block_to_text([48, 102, 95, 80, 52, 100, 100, 49, 110, 103, 125, 5, 5, 5, 5, 5])
+    plain = ""
 
     for i in xrange(len(blocks)-2, 0, -1):
         print "[+] Attacking block %d" % (i)
