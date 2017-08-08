@@ -1,4 +1,5 @@
 /* gcc -O2 -Wall gen_password.c -o gen_password */
+/* Generate combinaisons of passwords from a given charset */
 
 #include <stdio.h>
 #include <stdlib.h>
