@@ -7,7 +7,6 @@
 #include <string.h>
 
 
-
 int digit_swap(int c) {
   if(c == 'a')
     return '4';
@@ -19,6 +18,8 @@ int digit_swap(int c) {
     return '1';
   if(c == 's')
     return '5';
+  if(c == 'o')
+    return '0';
   return c;
 }
 
@@ -33,6 +34,8 @@ int digit_swap_rev(int c) {
     return 'l';
   if(c == '5')
     return 's';
+  if(c == '0')
+    return 'o';
   return c;
 }
 
