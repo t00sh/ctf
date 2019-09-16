@@ -60,6 +60,10 @@ if __name__ == '__main__':
     sa = params[0].hashG1(hash_m("this stuff")) * sk[0]
     sb = params[0].hashG1(hash_m("this stuff")) * sk[1]
 
+    # We have:
+    #   pka = sk1*g2
+    #   pkb = sk2*g2
+    #   pkc = sk3*g2
     # We want:
     #   l1*sk1'*g1 + l2*sk2'*g1 = L1*sk1'*g2 + L2*sk2'*g2 + L3*sk3'*g2
     # We set:
