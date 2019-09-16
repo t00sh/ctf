@@ -58,7 +58,7 @@ if __name__ == '__main__':
     l = [lagrange_basis(3, params[1], i, 0) for i in range(1,3+1)]
     pkc  = l[0]*(sk[0]*params[3] - pka)
     pkc += l[1]*(sk[1]*params[3] - pkb)
-    pkc += l[2]*(sk[2]*params[3])
+    pkc += (sk[2]*params[3])
 
     get_flag(r, params, [(sa, pka), (sb, pkb)], pkc)
     r.interactive()
