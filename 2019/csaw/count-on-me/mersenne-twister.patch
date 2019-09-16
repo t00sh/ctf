@@ -1,0 +1,44 @@
+diff --git a/mersenne-twister.cpp b/mersenne-twister.cpp
+index 5cbbe65..3082de4 100644
+--- a/mersenne-twister.cpp
++++ b/mersenne-twister.cpp
+@@ -148,13 +148,34 @@ extern "C" void seed(uint32_t value)
+    * Since we're using 32-bits data types for our MT array, we can skip the
+    * masking with 0xFFFFFFFF below.
+    */
++    uint32_t i, j, k;       /* was signed in the original code. RDH 12/16/2002 */
++
++    state.MT[0] = 19650218U;
++    state.index = SIZE;
++
++    for (i=1; i<SIZE; ++i )
++        state.MT[i] = (1812433253U * (state.MT[i-1] ^ (state.MT[i-1] >> 30)) + i);
++
++    i=1; j=0;
++    k = SIZE;
++    for (; k; k--) {
++        state.MT[i] = (state.MT[i] ^ ((state.MT[i-1] ^ (state.MT[i-1] >> 30)) * 1664525U))
++                 + value + (uint32_t)j; /* non linear */
++        i++; j++;
++        if (i>=SIZE) { state.MT[0] = state.MT[SIZE-1]; i=1; }
++        if (j >= 1) j = 0;
++    }
++    for (k=SIZE-1; k; k--) {
++        state.MT[i] = (state.MT[i] ^ ((state.MT[i-1] ^ (state.MT[i-1] >> 30)) * 1566083941U))
++                 - (uint32_t)i; /* non linear */
++        i++;
++        if (i>=SIZE) { state.MT[0] = state.MT[SIZE-1]; i=1; }
++    }
++
++    state.MT[0] = 0x80000000U; /* MSB is 1; assuring non-zero initial array */
++}
+ 
+-  state.MT[0] = value;
+-  state.index = SIZE;
+ 
+-  for ( uint_fast32_t i=1; i<SIZE; ++i )
+-    state.MT[i] = 0x6c078965*(state.MT[i-1] ^ state.MT[i-1]>>30) + i;
+-}
+ 
+ extern "C" uint32_t rand_u32()
+ {
