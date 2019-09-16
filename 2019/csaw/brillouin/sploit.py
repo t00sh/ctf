@@ -5,6 +5,15 @@ from petlib.bn import Bn
 from pwn import *
 from hashlib import sha256
 
+def inv_mod(a, b):
+    mod = b
+    x0, x1, y0, y1 = 0, 1, 1, 0
+    while a != 0:
+        q, b, a = b // a, a, b % a
+        y0, y1 = y1, y0 - q * y1
+        x0, x1 = x1, x0 - q * x1
+    return x0 % mod
+
 def hash_m(elements):
   Cstring = b",".join([str(x) for x in elements])
   return  sha256(Cstring).digest()
@@ -25,19 +34,15 @@ def get_sig(r, params, n, text):
     return G1Elem.from_bytes(b64decode(l), params[0])
 
 def get_flag(r, params, l, pk):
-    print(l)
-    print(pk)
     r.recvuntil("what do you want to do?")
     r.sendline("4")
     r.recvline()
     r.recvline()
     for s,p in l:
-        print(r.recvline())
         r.sendline(b64encode(s.export()))
-        print(r.recvline())
         r.sendline(b64encode(p.export()))
 
-    print(r.recvline())
+    r.clean(1.0)
     r.sendline(b64encode(pk.export()))
 
 
@@ -56,8 +61,10 @@ if __name__ == '__main__':
     sb = params[0].hashG1(hash_m("this stuff")) * sk[1]
 
     l = [lagrange_basis(3, params[1], i, 0) for i in range(1,3+1)]
-    pkc  = l[0]*(sk[0]*params[3] - pka)
-    pkc += l[1]*(sk[1]*params[3] - pkb)
+    l2_inv = inv_mod(l[2], params[1])
+
+    pkc  = l2_inv*l[0]*(sk[0]*params[3] - pka)
+    pkc += l2_inv*l[1]*(sk[1]*params[3] - pkb)
     pkc += (sk[2]*params[3])
 
     get_flag(r, params, [(sa, pka), (sb, pkb)], pkc)
