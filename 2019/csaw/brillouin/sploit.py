@@ -60,6 +60,15 @@ if __name__ == '__main__':
     sa = params[0].hashG1(hash_m("this stuff")) * sk[0]
     sb = params[0].hashG1(hash_m("this stuff")) * sk[1]
 
+    # We want:
+    #   l1*sk1'*g1 + l2*sk2'*g1 = L1*sk1'*g2 + L2*sk2'*g2 + L3*sk3'*g2
+    # We set:
+    #   sa = l1*sk1'*g1
+    #   sb = l2*sk2'*g1
+    #   pka = pka
+    #   pkb = pkb
+    #   pkc = sk3' + L3^(-1)*(L1*sk1'*g2 - pka + L2*sk2'*g2 - pkb)
+
     l = [lagrange_basis(3, params[1], i, 0) for i in range(1,3+1)]
     l2_inv = inv_mod(l[2], params[1])
 
